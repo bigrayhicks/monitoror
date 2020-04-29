@@ -22,6 +22,6 @@ func TestInitConfig_WithEnv(t *testing.T) {
 
 	config := InitConfig()
 
-	assert.Equal(t, "production", config.Env)
+	assert.Equal(t, false, config.DisableUI)
 	assert.Equal(t, 3000, config.Port)
 }

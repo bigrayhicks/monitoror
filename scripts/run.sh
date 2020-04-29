@@ -12,6 +12,7 @@ source ./scripts/setup-variables.sh
 # Set environment (default: development)
 export MO_ENV=${MO_ENV:-$MB_ENVIRONMENT}
 export MO_DISABLEUI=true
+export MO_DEBUG=true
 
 target=$MB_BINARIES_PATH/monitoror-run
 go build -o "$target" --ldflags "$MB_GO_LDFLAGS" --tags "$MB_GO_TAGS" "${MB_SOURCE_PATH}"

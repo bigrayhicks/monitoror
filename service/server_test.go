@@ -3,6 +3,7 @@ package service
 import (
 	"testing"
 
+	"github.com/monitoror/monitoror/cli/debug"
 	"github.com/monitoror/monitoror/config"
 	"github.com/monitoror/monitoror/registry"
 	"github.com/monitoror/monitoror/store"
@@ -15,8 +16,9 @@ import (
 // Note : It may be necessary to separate them from unit tests
 
 func TestInit_Dev(t *testing.T) {
+	debug.Enable()
 	s := &store.Store{
-		CoreConfig: &config.Config{Env: "develop"},
+		CoreConfig: &config.Config{DisableUI: true},
 		Registry:   registry.NewRegistry(),
 	}
 
@@ -27,7 +29,7 @@ func TestInit_Dev(t *testing.T) {
 
 func TestInit_Prod_WithoutRicebox(t *testing.T) {
 	s := &store.Store{
-		CoreConfig: &config.Config{Env: "production"},
+		CoreConfig: &config.Config{DisableUI: false},
 		Registry:   registry.NewRegistry(),
 	}
 
@@ -39,7 +41,7 @@ func TestInit_Prod_WithoutRicebox(t *testing.T) {
 
 func TestInit_Prod_WithRicebox(t *testing.T) {
 	s := &store.Store{
-		CoreConfig: &config.Config{Env: "production"},
+		CoreConfig: &config.Config{DisableUI: false},
 		Registry:   registry.NewRegistry(),
 	}
 

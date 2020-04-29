@@ -7,5 +7,5 @@ set -e
 # This script is used to package ui/dist in go source #
 #######################################################
 
-rm -f service/rice-box.go
-rice embed-go -i ./service
+rm -f cli/commands/init/rice-box.go
+rice embed-go -i ./cli/commands/init
