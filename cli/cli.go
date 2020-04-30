@@ -10,30 +10,14 @@ import (
 )
 
 type MonitororCli struct {
-	rootCmd *cobra.Command
-	store   *store.Store
-	output  io.Writer
+	RootCmd *cobra.Command
+	Store   *store.Store
+	Output  io.Writer
 }
 
 func NewMonitororCli(store *store.Store) *MonitororCli {
 	return &MonitororCli{
-		store:  store,
-		output: os.Stdout,
+		Store:  store,
+		Output: os.Stdout,
 	}
-}
-
-func (c *MonitororCli) SetRootCommand(rootCmd *cobra.Command) {
-	c.rootCmd = rootCmd
-}
-
-func (c *MonitororCli) GetRootCommand() *cobra.Command {
-	return c.rootCmd
-}
-
-func (c *MonitororCli) GetStore() *store.Store {
-	return c.store
-}
-
-func (c *MonitororCli) GetOutput() io.Writer {
-	return c.output
 }

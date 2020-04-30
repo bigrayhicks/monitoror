@@ -1,3 +1,5 @@
+//go:generate mockery -name Monitorable
+
 package models
 
 type Monitorable interface {

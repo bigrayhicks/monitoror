@@ -6,7 +6,7 @@ import (
 )
 
 func AddCommands(cli *cli.MonitororCli) {
-	cli.GetRootCommand().AddCommand(
+	cli.RootCmd.AddCommand(
 		version.NewVersionCommand(cli),
 	)
 }

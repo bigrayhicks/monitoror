@@ -22,13 +22,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-func newMonitororCommand(monitororCli *cli.MonitororCli) {
+func newMonitororRootCommand(monitororCli *cli.MonitororCli) {
 	cmd := &cobra.Command{
 		Use:   "monitoror",
 		Short: "Unified monitoring wallboard",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Init Service
-			server := service.Init(monitororCli.GetStore())
+			server := service.Init(monitororCli.Store)
 
 			if err := helper.PrintMonitororStartupLog(monitororCli); err != nil {
 				return err
@@ -43,7 +43,7 @@ func newMonitororCommand(monitororCli *cli.MonitororCli) {
 	_ = viper.BindPFlag("debug", cmd.PersistentFlags().Lookup("debug"))
 
 	// Setup this command as root command in cli
-	monitororCli.SetRootCommand(cmd)
+	monitororCli.RootCmd = cmd
 
 	// add other command
 	commands.AddCommands(monitororCli)
@@ -69,10 +69,10 @@ func main() {
 
 	// Init CLI
 	monitororCli := cli.NewMonitororCli(store)
-	newMonitororCommand(monitororCli)
+	newMonitororRootCommand(monitororCli)
 
 	// Start CLI
-	if err := monitororCli.GetRootCommand().Execute(); err != nil {
+	if err := monitororCli.RootCmd.Execute(); err != nil {
 		log.Error(err)
 		os.Exit(1)
 	}

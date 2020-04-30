@@ -62,8 +62,10 @@ Check the documentation to know how to enabled them:
 
 {{ end }}
 Monitoror is running at:
-  {{ printf "http://localhost:%d" .LookupPort | blue }}
-  {{ printf "http://%s:%d" .LookupAddress .LookupPort | blue }}
+{{- range .DisplayedAddresses }}
+  {{ printf "http://%s:%d" . $.LookupPort | blue }}
+{{- end }}
+
 `
 
 type (
@@ -71,7 +73,7 @@ type (
 		Version       string // From ldflags
 		BuildTags     string // From ldflagsl
 		LookupPort    int    // From .env
-		LookupAddress string // From system
+		LookupAddress string // From .env
 		DisableUI     bool   // From .env
 		Monitorables  []monitorableInfo
 	}
@@ -101,12 +103,12 @@ func PrintMonitororStartupLog(monitororCli *cli.MonitororCli) error {
 	monitororInfo := &monitororInfo{
 		Version:       version.Version,
 		BuildTags:     version.BuildTags,
-		DisableUI:     monitororCli.GetStore().CoreConfig.DisableUI,
-		LookupPort:    monitororCli.GetStore().CoreConfig.Port,
-		LookupAddress: system.GetNetworkIP(),
+		DisableUI:     monitororCli.Store.CoreConfig.DisableUI,
+		LookupPort:    monitororCli.Store.CoreConfig.Port,
+		LookupAddress: monitororCli.Store.CoreConfig.Address,
 	}
 
-	for _, mm := range monitororCli.GetStore().Registry.GetMonitorables() {
+	for _, mm := range monitororCli.Store.Registry.GetMonitorables() {
 		monitorableInfo := monitorableInfo{
 			MonitorableName: mm.Monitorable.GetDisplayName(),
 		}
@@ -129,11 +131,11 @@ func PrintMonitororStartupLog(monitororCli *cli.MonitororCli) error {
 		monitororInfo.Monitorables = append(monitororInfo.Monitorables, monitorableInfo)
 	}
 
-	return parsedTemplate.Execute(monitororCli.GetOutput(), monitororInfo)
+	return parsedTemplate.Execute(monitororCli.Output, monitororInfo)
 }
 
 func (mi *monitororInfo) DocumentationVersion() string {
-	if strings.HasSuffix(mi.Version, "-dev") {
+	if !strings.HasSuffix(mi.Version, "-dev") {
 		return ""
 	}
 	documentationVersion := ""
@@ -151,6 +153,19 @@ func (mi *monitororInfo) DisabledMonitorableCount() int {
 		}
 	}
 	return disabledMonitorableCount
+}
+
+func (mi *monitororInfo) DisplayedAddresses() []string {
+	var adressess []string
+
+	if mi.LookupAddress != "" {
+		adressess = append(adressess, mi.LookupAddress)
+	} else {
+		adressess = append(adressess, "localhost")
+		adressess = append(adressess, system.GetNetworkIP())
+	}
+
+	return adressess
 }
 
 func (mi *monitorableInfo) IsDisabled() bool {

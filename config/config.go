@@ -15,6 +15,7 @@ type (
 	Config struct {
 		// --- General Configuration ---
 		Port      int
+		Address   string
 		DisableUI bool
 
 		// --- Cache Configuration ---
@@ -30,6 +31,7 @@ type (
 
 var defaultConfig = &Config{
 	Port:                      8080,
+	Address:                   "",
 	DisableUI:                 false,
 	UpstreamCacheExpiration:   10000,
 	DownstreamCacheExpiration: 120000,

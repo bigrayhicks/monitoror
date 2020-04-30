@@ -60,5 +60,5 @@ func runVersion(monitororCli *cli.MonitororCli) error {
 		Arch:      runtime.GOARCH,
 	}
 
-	return parsedTemplate.Execute(monitororCli.GetOutput(), vi)
+	return parsedTemplate.Execute(monitororCli.Output, vi)
 }

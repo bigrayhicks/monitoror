@@ -49,7 +49,7 @@ func Init(store *store.Store) *Server {
 }
 
 func (s *Server) Start() error {
-	return s.Echo.Start(fmt.Sprintf(":%d", s.store.CoreConfig.Port))
+	return s.Echo.Start(fmt.Sprintf("%s:%d", s.store.CoreConfig.Address, s.store.CoreConfig.Port))
 }
 
 func (s *Server) setupEchoServer() {
